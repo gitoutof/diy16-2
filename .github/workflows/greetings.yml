@@ -65,6 +65,10 @@ jobs:
     - name: Clone other packages
       run: |
         git clone --depth 1 -b master https://github.com/vernesong/OpenClash.git && mv OpenClash/luci-app-openclash openwrt/package/luci-app-openclash
+        
+        git clone --depth 1 https://github.com/pymumu/smartdns.git openwrt/package/smartdns
+        git clone --depth 1 -b lede https://github.com/pymumu/luci-app-smartdns.git openwrt/package/luci-app-smartdns
+          
         df -hT $PWD
 
     - name: Update & Install feeds
