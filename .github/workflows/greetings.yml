@@ -35,6 +35,9 @@ jobs:
           /usr/share/dotnet \
           /etc/mysql \
           /etc/php
+        
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        
         sudo -E apt-get -y purge \
           azure-cli \
           ghc* \
@@ -50,6 +53,7 @@ jobs:
           php*
         sudo -E apt-get update
         sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev patch unzip lib32gcc1 libc6-dev-i386 subversion flex node-uglify gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils  libelf-dev autoconf automake libtool autopoint device-tree-compiler libuv-dev python3.6 zlib1g-dev upx-ucl node-uglify antlr3 gperf
+        sudo -E apt-get -qq install python-dns python-django python-twisted python-yaml python-parsley
         sudo -E apt-get -y autoremove --purge
         sudo -E apt-get clean
 
