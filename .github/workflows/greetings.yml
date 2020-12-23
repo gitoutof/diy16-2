@@ -7,7 +7,14 @@ on:
         description: 'Person to greet'
         default: 'World'
         required: true
-
+env:
+     
+    SSH_ACTIONS: false
+    UPLOAD_BIN_DIR: true
+    UPLOAD_FIRMWARE: true
+    UPLOAD_COWTRANSFER: false
+    UPLOAD_WETRANSFER: false
+    TZ: Asia/Shanghai
 
 jobs:
   greeting:
@@ -96,14 +103,43 @@ jobs:
         make download -j$(nproc)
         find dl -size -1024c -exec ls -l {} \;
         find dl -size -1024c -exec rm -f {} \;
+        
     - name: Build firmware
+      id: compile
       working-directory: ./openwrt
       run: |
         echo -e "$(nproc) thread build."
         make -j$(nproc) V=s
+        pwd
+        ls -al
+        
     - name : Upload artifact
       uses: actions/upload-artifact@main
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
         name: OpenWrt
         path: Openwrt/bin  
+    
+    
+    
+    - name: Organize files
+      id: organize
+      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      run: |
+        cd openwrt/bin/targets/*/*
+        rm -rf packages
+        echo "::set-output name=FIRMWARE::$PWD"
+        echo "::set-output name=status::success"
+
+    - name: Upload firmware directory
+      uses: actions/upload-artifact@main
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: OpenWrt_firmware_${{ steps.compile.outputs.DEVICE_NAME }}_${{ steps.compile.outputs.FILE_DATE }}
+        path: ${{ steps.organize.outputs.FIRMWARE }}
+        
+        
+        
+        
+       
 
