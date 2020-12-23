@@ -9,7 +9,6 @@ on:
         required: true
 env:
      
-    SSH_ACTIONS: false
     UPLOAD_BIN_DIR: true
     UPLOAD_FIRMWARE: true
     UPLOAD_COWTRANSFER: false
