@@ -54,7 +54,12 @@ jobs:
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
         cd openwrt
         sed -i '5s/#//' feeds.conf.default
-        
+
+    - name: Clone other packages
+      run: |
+        git clone --depth 1 -b master https://github.com/vernesong/OpenClash.git && mv OpenClash/luci-app-openclash openwrt/package/luci-app-openclash
+        df -hT $PWD
+
     - name: Update & Install feeds
       working-directory: ./openwrt
       run: |
